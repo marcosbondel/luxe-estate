@@ -20,13 +20,13 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       {currentPage > 1 ? (
         <Link
           href={`?page=${currentPage - 1}`}
-          className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/10 dark:border-white/10 bg-white dark:bg-white/5 text-nordic-dark dark:text-white hover:border-mosque hover:text-mosque transition-all"
+          className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/10 bg-white text-nordic-dark hover:border-mosque hover:text-mosque transition-all"
           aria-label="Previous page"
         >
           <span className="material-icons text-lg">chevron_left</span>
         </Link>
       ) : (
-        <span className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/5 dark:border-white/5 text-nordic-muted cursor-not-allowed opacity-40">
+        <span className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/5 text-nordic-muted cursor-not-allowed opacity-40">
           <span className="material-icons text-lg">chevron_left</span>
         </span>
       )}
@@ -42,7 +42,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
             className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-all ${
               isActive
                 ? 'bg-mosque text-white shadow-md'
-                : 'bg-white dark:bg-white/5 border border-nordic-dark/10 dark:border-white/10 text-nordic-dark dark:text-white hover:border-mosque hover:text-mosque'
+                : 'bg-white border border-nordic-dark/10 text-nordic-dark hover:border-mosque hover:text-mosque'
             }`}
           >
             {page}
@@ -54,13 +54,13 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       {currentPage < totalPages ? (
         <Link
           href={`?page=${currentPage + 1}`}
-          className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/10 dark:border-white/10 bg-white dark:bg-white/5 text-nordic-dark dark:text-white hover:border-mosque hover:text-mosque transition-all"
+          className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/10 bg-white text-nordic-dark hover:border-mosque hover:text-mosque transition-all"
           aria-label="Next page"
         >
           <span className="material-icons text-lg">chevron_right</span>
         </Link>
       ) : (
-        <span className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/5 dark:border-white/5 text-nordic-muted cursor-not-allowed opacity-40">
+        <span className="w-10 h-10 flex items-center justify-center rounded-lg border border-nordic-dark/5 text-nordic-muted cursor-not-allowed opacity-40">
           <span className="material-icons text-lg">chevron_right</span>
         </span>
       )}

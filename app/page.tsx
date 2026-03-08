@@ -46,7 +46,7 @@ export default async function Home({ searchParams }: HomePageProps) {
         <section className="mb-16">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-light text-nordic-dark dark:text-white">Featured Collections</h2>
+              <h2 className="text-2xl font-light text-nordic-dark">Featured Collections</h2>
               <p className="text-nordic-muted mt-1 text-sm">Curated properties for the discerning eye.</p>
             </div>
             <a className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity" href="#">
@@ -65,7 +65,7 @@ export default async function Home({ searchParams }: HomePageProps) {
         <section>
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-light text-nordic-dark dark:text-white">New in Market</h2>
+              <h2 className="text-2xl font-light text-nordic-dark">New in Market</h2>
               <p className="text-nordic-muted mt-1 text-sm">
                 Fresh opportunities added this week.
                 {count != null && (
@@ -73,10 +73,10 @@ export default async function Home({ searchParams }: HomePageProps) {
                 )}
               </p>
             </div>
-            <div className="hidden md:flex bg-white dark:bg-white/5 p-1 rounded-lg">
+            <div className="hidden md:flex bg-white p-1 rounded-lg">
               <button className="px-4 py-1.5 rounded-md text-sm font-medium bg-nordic-dark text-white shadow-sm">All</button>
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark dark:hover:text-white transition-colors">Buy</button>
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark dark:hover:text-white transition-colors">Rent</button>
+              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark transition-colors">Buy</button>
+              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark transition-colors">Rent</button>
             </div>
           </div>
 

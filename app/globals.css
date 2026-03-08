@@ -29,15 +29,12 @@
   }
 }
 
+html {
+  color-scheme: light;
+}
+
 body {
   background-color: var(--color-background-light);
   color: var(--color-nordic-dark);
   font-family: var(--font-display);
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: var(--color-background-dark);
-    color: #ffffff;
-  }
 }
