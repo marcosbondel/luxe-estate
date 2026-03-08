@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Property } from '../data/mockProperties';
+import type { Property } from '../types/property';
 
 interface PropertyCardProps {
   property: Property;
@@ -16,7 +16,7 @@ export default function PropertyCard({ property, className = '' }: PropertyCardP
         <img
           alt={property.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          src={property.imageUrl}
+          src={property.image_url}
         />
         <button className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-black/50 rounded-full hover:bg-mosque hover:text-white transition-colors text-nordic-dark">
           <span className="material-icons text-lg">favorite_border</span>
@@ -30,7 +30,7 @@ export default function PropertyCard({ property, className = '' }: PropertyCardP
         <div className="flex justify-between items-baseline mb-2">
           <h3 className="font-bold text-lg text-nordic-dark dark:text-white">
             ${property.price.toLocaleString()}
-            {property.priceLabel && <span className="text-sm font-normal text-nordic-muted">{property.priceLabel}</span>}
+            {property.price_label && <span className="text-sm font-normal text-nordic-muted">{property.price_label}</span>}
           </h3>
         </div>
         
