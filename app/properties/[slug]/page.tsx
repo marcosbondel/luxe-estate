@@ -19,11 +19,8 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
     return notFound();
   }
 
-  // Fallback if the script didn't populate properly
-  const mainImage = property.image_url;
-  const galleryImages = property.images && property.images.length >= 4
-    ? property.images
-    : [mainImage, mainImage, mainImage, mainImage];
+  const mainImage = property.images[0];
+  const galleryImages = property.images;
 
   return (
     <>

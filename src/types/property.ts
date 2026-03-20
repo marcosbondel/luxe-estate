@@ -14,8 +14,7 @@ export interface Property {
   beds: number;
   baths: number;
   area: number;
-  image_url: string;
-  images?: string[];
+  images: string[];
   is_featured: boolean;
   tag: string | null;
   created_at: string;
