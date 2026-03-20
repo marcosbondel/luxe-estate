@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "buy": "Comprar",
+    "rent": "Rentar",
+    "sell": "Vender",
+    "savedHomes": "Casas Guardadas"
+  },
+  "hero": {
+    "findYour": "Encuentra tu",
+    "sanctuary": "santuario",
+    "searchPlaceholder": "Busca por ciudad, colonia o dirección...",
+    "searchButton": "Buscar",
+    "categories": {
+      "all": "Todos",
+      "house": "Casa",
+      "apartment": "Departamento",
+      "villa": "Villa",
+      "penthouse": "Penthouse"
+    },
+    "filters": "Filtros"
+  },
+  "home": {
+    "featuredCollections": "Colecciones Destacadas",
+    "featuredSubtitle": "Propiedades seleccionadas para el ojo exigente.",
+    "viewAll": "Ver todas",
+    "newInMarket": "Novedades en el Mercado",
+    "newSubtitle": "Nuevas oportunidades añadidas esta semana.",
+    "listings": "listados"
+  },
+  "property": {
+    "premium": "Premium",
+    "new": "Nuevo",
+    "viewAllPhotos": "Ver todas las fotos",
+    "scheduleVisit": "Agendar Visita",
+    "contactAgent": "Contactar Agente",
+    "features": "Características",
+    "squareMeters": "Metros Cuadrados",
+    "bedrooms": "Recámaras",
+    "bathrooms": "Baños",
+    "garage": "Estacionamiento",
+    "about": "Acerca de esta casa",
+    "aboutText1": "Experimenta el lujo moderno en {title} ubicado en el corazón de {location}. Diseñado con un enfoque en la vida interior-exterior, la residencia cuenta con paredes de cristal de piso a techo que inundan los interiores con luz natural.",
+    "aboutText2": "La cocina de concepto abierto está equipada con electrodomésticos de primera línea y gabinetes a medida, perfecta para entusiastas culinarios. Retírate a la suite principal, un santuario de relajación con un baño inspirado en un spa y un balcón privado.",
+    "readMore": "Leer más",
+    "amenities": "Amenidades",
+    "amenitiesList": {
+      "smartHome": "Sistema de Casa Inteligente",
+      "pool": "Piscina",
+      "heating": "Aire Acondicionado Central",
+      "charging": "Carga de Vehículo Eléctrico",
+      "gym": "Gimnasio Privado",
+      "wine": "Cava de Vinos"
+    },
+    "estimatedPayment": "Pago Estimado",
+    "startingFrom": "Desde",
+    "withDown": "con 20% de enganche",
+    "calculateMortgage": "Calcular Hipoteca",
+    "agentTitle": "Agente Mejor Valorado"
+  },
+  "footer": {
+    "rights": "© 2026 LuxeEstate Inc. Todos los derechos reservados."
+  },
+  "common": {
+    "loading": "Cargando..."
+  }
+}

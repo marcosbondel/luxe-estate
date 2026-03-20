@@ -1,25 +1,30 @@
 import React from 'react';
-import Navbar from '../src/components/Navbar';
-import HeroSection from '../src/components/HeroSection';
-import FeaturedPropertyCard from '../src/components/FeaturedPropertyCard';
-import PropertyCard from '../src/components/PropertyCard';
-import Pagination from '../src/components/Pagination';
-import { supabase } from '../src/lib/supabase';
-import type { Property } from '../src/types/property';
+import Navbar from '../../src/components/Navbar';
+import HeroSection from '../../src/components/HeroSection';
+import FeaturedPropertyCard from '../../src/components/FeaturedPropertyCard';
+import PropertyCard from '../../src/components/PropertyCard';
+import Pagination from '../../src/components/Pagination';
+import { supabase } from '../../src/lib/supabase';
+import type { Property } from '../../src/types/property';
+import { getDictionary } from '../../src/lib/dictionaries';
+import { type Locale } from '../../src/lib/i18n';
 
 const PAGE_SIZE = 8;
 
 interface HomePageProps {
+  params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
-export default async function Home({ searchParams }: HomePageProps) {
-  const params = await searchParams;
-  const currentPage = Math.max(1, parseInt(params.page ?? '1', 10));
+export default async function Home({ params, searchParams }: HomePageProps) {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  const searchValues = await searchParams;
+  const currentPage = Math.max(1, parseInt(searchValues.page ?? '1', 10));
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const activeCategory = params.category;
-  const activeSearch = params.q;
+  const activeCategory = searchValues.category;
+  const activeSearch = searchValues.q;
   const hasFilters = !!(activeCategory || activeSearch);
 
   // Fetch featured properties (not paginated - only show 2)
@@ -60,21 +65,21 @@ export default async function Home({ searchParams }: HomePageProps) {
 
   return (
     <>
-      <Navbar />
+      <Navbar dict={dict.navbar} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <HeroSection />
+        <HeroSection dict={dict.hero} />
 
         {/* Featured Collections Section */}
         {!hasFilters && featuredProperties.length > 0 && (
           <section className="mb-16">
             <div className="flex items-end justify-between mb-8">
               <div>
-                <h2 className="text-2xl font-light text-nordic-dark">Featured Collections</h2>
-                <p className="text-nordic-muted mt-1 text-sm">Curated properties for the discerning eye.</p>
+                <h2 className="text-2xl font-light text-nordic-dark">{dict.home.featuredCollections}</h2>
+                <p className="text-nordic-muted mt-1 text-sm">{dict.home.featuredSubtitle}</p>
               </div>
               <a className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity" href="#">
-                View all <span className="material-icons text-sm">arrow_forward</span>
+                {dict.home.viewAll} <span className="material-icons text-sm">arrow_forward</span>
               </a>
             </div>
 
@@ -90,18 +95,18 @@ export default async function Home({ searchParams }: HomePageProps) {
         <section>
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-light text-nordic-dark">New in Market</h2>
+              <h2 className="text-2xl font-light text-nordic-dark">{dict.home.newInMarket}</h2>
               <p className="text-nordic-muted mt-1 text-sm">
-                Fresh opportunities added this week.
+                {dict.home.newSubtitle}
                 {count != null && (
-                  <span className="ml-2 text-mosque font-medium">{count} listings</span>
+                  <span className="ml-2 text-mosque font-medium">{count} {dict.home.listings}</span>
                 )}
               </p>
             </div>
             <div className="hidden md:flex bg-white p-1 rounded-lg">
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium bg-nordic-dark text-white shadow-sm">All</button>
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark transition-colors">Buy</button>
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark transition-colors">Rent</button>
+              <button className="px-4 py-1.5 rounded-md text-sm font-medium bg-nordic-dark text-white shadow-sm">{dict.hero.categories.all}</button>
+              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark transition-colors">{dict.navbar.buy}</button>
+              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark transition-colors">{dict.navbar.rent}</button>
             </div>
           </div>
 

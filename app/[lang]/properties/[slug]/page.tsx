@@ -1,12 +1,16 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import Navbar from '../../../src/components/Navbar';
-import { supabase } from '../../../src/lib/supabase';
-import type { Property } from '../../../src/types/property';
-import MapLoader from '../../../src/components/MapLoader';
+import Navbar from '../../../../src/components/Navbar';
+import { supabase } from '../../../../src/lib/supabase';
+import type { Property } from '../../../../src/types/property';
+import MapLoader from '../../../../src/components/MapLoader';
 
-export default async function PropertyDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+import { getDictionary } from '../../../../src/lib/dictionaries';
+import { type Locale } from '../../../../src/lib/i18n';
+
+export default async function PropertyDetailsPage({ params }: { params: Promise<{ slug: string, lang: string }> }) {
+  const { slug, lang } = await params;
+  const dict = await getDictionary(lang as Locale);
 
   // Fetch the property by slug
   const { data: property, error } = await supabase
@@ -24,7 +28,7 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
 
   return (
     <>
-      <Navbar />
+      <Navbar dict={dict.navbar} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
           <div className="lg:col-span-8 space-y-4">
@@ -35,12 +39,12 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
                 src={mainImage}
               />
               <div className="absolute top-4 left-4 flex gap-2">
-                <span className="bg-mosque text-white text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">Premium</span>
-                <span className="bg-white/90 backdrop-blur text-nordic text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">New</span>
+                <span className="bg-mosque text-white text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">{dict.property.premium}</span>
+                <span className="bg-white/90 backdrop-blur text-nordic text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">{dict.property.new}</span>
               </div>
               <button className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-nordic px-4 py-2 rounded-lg text-sm font-medium shadow-lg backdrop-blur transition-all flex items-center gap-2">
                 <span className="material-icons text-sm">grid_view</span>
-                View All Photos
+                {dict.property.viewAllPhotos}
               </button>
             </div>
 
@@ -87,7 +91,7 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
                     <h3 className="font-semibold text-nordic">Sarah Jenkins</h3>
                     <div className="flex items-center gap-1 text-xs text-mosque font-medium">
                       <span className="material-icons text-[14px]">star</span>
-                      <span>Top Rated Agent</span>
+                      <span>{dict.property.agentTitle}</span>
                     </div>
                   </div>
                   <div className="ml-auto flex gap-2">
@@ -103,11 +107,11 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
                 <div className="space-y-3">
                   <button className="w-full bg-mosque hover:bg-primary-hover text-white py-4 px-6 rounded-lg font-medium transition-all shadow-lg shadow-mosque/20 flex items-center justify-center gap-2 group">
                     <span className="material-icons text-xl group-hover:scale-110 transition-transform">calendar_today</span>
-                    Schedule Visit
+                    {dict.property.scheduleVisit}
                   </button>
                   <button className="w-full bg-transparent border border-nordic/10 hover:border-mosque text-nordic/80 hover:text-mosque py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2">
                     <span className="material-icons text-xl">mail_outline</span>
-                    Contact Agent
+                    {dict.property.contactAgent}
                   </button>
                 </div>
               </div>
@@ -121,54 +125,53 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
 
           <div className="lg:col-span-8 lg:row-start-2 -mt-8 space-y-8">
             <div className="bg-white p-8 rounded-xl shadow-sm border border-mosque/5">
-              <h2 className="text-lg font-semibold mb-6 text-nordic">Property Features</h2>
+              <h2 className="text-lg font-semibold mb-6 text-nordic">{dict.property.features}</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="flex flex-col items-center justify-center p-4 bg-mosque/5 rounded-lg border border-mosque/10">
                   <span className="material-icons text-mosque text-2xl mb-2">square_foot</span>
                   <span className="text-xl font-bold text-nordic">{property.area}</span>
-                  <span className="text-xs uppercase tracking-wider text-nordic/50">Square Meters</span>
+                  <span className="text-xs uppercase tracking-wider text-nordic/50">{dict.property.squareMeters}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-mosque/5 rounded-lg border border-mosque/10">
                   <span className="material-icons text-mosque text-2xl mb-2">bed</span>
                   <span className="text-xl font-bold text-nordic">{property.beds}</span>
-                  <span className="text-xs uppercase tracking-wider text-nordic/50">Bedrooms</span>
+                  <span className="text-xs uppercase tracking-wider text-nordic/50">{dict.property.bedrooms}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-mosque/5 rounded-lg border border-mosque/10">
                   <span className="material-icons text-mosque text-2xl mb-2">shower</span>
                   <span className="text-xl font-bold text-nordic">{property.baths}</span>
-                  <span className="text-xs uppercase tracking-wider text-nordic/50">Bathrooms</span>
+                  <span className="text-xs uppercase tracking-wider text-nordic/50">{dict.property.bathrooms}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-mosque/5 rounded-lg border border-mosque/10">
                   <span className="material-icons text-mosque text-2xl mb-2">directions_car</span>
                   <span className="text-xl font-bold text-nordic">2</span>
-                  <span className="text-xs uppercase tracking-wider text-nordic/50">Garage</span>
+                  <span className="text-xs uppercase tracking-wider text-nordic/50">{dict.property.garage}</span>
                 </div>
               </div>
             </div>
             
             <div className="bg-white p-8 rounded-xl shadow-sm border border-mosque/5">
-              <h2 className="text-lg font-semibold mb-4 text-nordic">About this home</h2>
+              <h2 className="text-lg font-semibold mb-4 text-nordic">{dict.property.about}</h2>
               <div className="prose prose-slate max-w-none text-nordic/70 leading-relaxed">
                 <p className="mb-4">
-                  Experience modern luxury in {property.title} located in the heart of {property.location}.
-                  Designed with an emphasis on indoor-outdoor living, the residence features floor-to-ceiling glass walls that flood the interiors with natural light.
+                  {dict.property.aboutText1.replace('{title}', property.title).replace('{location}', property.location)}
                 </p>
                 <p>
-                  The open-concept kitchen is equipped with top-of-the-line appliances and custom cabinetry, perfect for culinary enthusiasts. Retreat to the primary suite, a sanctuary of relaxation with a spa-inspired bath and private balcony.
+                  {dict.property.aboutText2}
                 </p>
               </div>
               <button className="mt-4 text-mosque font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
-                Read more
+                {dict.property.readMore}
                 <span className="material-icons text-sm">arrow_forward</span>
               </button>
             </div>
             
             <div className="bg-white p-8 rounded-xl shadow-sm border border-mosque/5">
-              <h2 className="text-lg font-semibold mb-6 text-nordic">Amenities</h2>
+              <h2 className="text-lg font-semibold mb-6 text-nordic">{dict.property.amenities}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
                 {[
-                  "Smart Home System", "Swimming Pool", "Central Heating & Cooling",
-                  "Electric Vehicle Charging", "Private Gym", "Wine Cellar"
+                  dict.property.amenitiesList.smartHome, dict.property.amenitiesList.pool, dict.property.amenitiesList.heating,
+                  dict.property.amenitiesList.charging, dict.property.amenitiesList.gym, dict.property.amenitiesList.wine
                 ].map((amenity, i) => (
                   <div key={i} className="flex items-center gap-3 text-nordic/70">
                     <span className="material-icons text-mosque/60 text-sm">check_circle</span>
@@ -184,12 +187,12 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
                   <span className="material-icons">calculate</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-nordic">Estimated Payment</h3>
-                  <p className="text-sm text-nordic/60">Starting from <strong className="text-mosque">$5,430/mo</strong> with 20% down</p>
+                  <h3 className="font-semibold text-nordic">{dict.property.estimatedPayment}</h3>
+                  <p className="text-sm text-nordic/60">{dict.property.startingFrom} <strong className="text-mosque">$5,430/mo</strong> {dict.property.withDown}</p>
                 </div>
               </div>
               <button className="whitespace-nowrap px-4 py-2 bg-white border border-nordic/10 rounded-lg text-sm font-semibold hover:border-mosque transition-colors text-nordic">
-                Calculate Mortgage
+                {dict.property.calculateMortgage}
               </button>
             </div>
           </div>
@@ -199,7 +202,7 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
       <footer className="bg-white border-t border-slate-200 mt-12 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-sm text-nordic/50">
-            © 2026 LuxeEstate Inc. All rights reserved.
+            {dict.footer.rights}
           </div>
           <div className="flex gap-6">
             <a href="#" className="text-nordic/40 hover:text-mosque transition-colors">

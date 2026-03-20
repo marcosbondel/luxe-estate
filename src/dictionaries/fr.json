@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "buy": "Acheter",
+    "rent": "Louer",
+    "sell": "Vendre",
+    "savedHomes": "Maisons Sauvegardées"
+  },
+  "hero": {
+    "findYour": "Trouvez votre",
+    "sanctuary": "sanctuaire",
+    "searchPlaceholder": "Rechercher par ville, quartier ou adresse...",
+    "searchButton": "Rechercher",
+    "categories": {
+      "all": "Tout",
+      "house": "Maison",
+      "apartment": "Appartement",
+      "villa": "Villa",
+      "penthouse": "Penthouse"
+    },
+    "filters": "Filtres"
+  },
+  "home": {
+    "featuredCollections": "Collections Sélectionnées",
+    "featuredSubtitle": "Des propriétés de choix pour les plus exigeants.",
+    "viewAll": "Voir tout",
+    "newInMarket": "Nouveautés sur le Marché",
+    "newSubtitle": "Nouvelles opportunités ajoutées cette semaine.",
+    "listings": "annonces"
+  },
+  "property": {
+    "premium": "Premium",
+    "new": "Nouveau",
+    "viewAllPhotos": "Voir toutes les photos",
+    "scheduleVisit": "Planifier une visite",
+    "contactAgent": "Contacter l'Agent",
+    "features": "Caractéristiques de la Propriété",
+    "squareMeters": "Mètres Carrés",
+    "bedrooms": "Chambres",
+    "bathrooms": "Salles de bain",
+    "garage": "Garage",
+    "about": "À propos de cette maison",
+    "aboutText1": "Découvrez le luxe moderne à {title} situé au cœur de {location}. Conçu avec un accent sur la vie intérieur-extérieur, la résidence présente des murs en verre du sol au plafond qui inondent les intérieurs de lumière naturelle.",
+    "aboutText2": "La cuisine à aire ouverte est équipée d'appareils haut de gamme et d'armoires sur mesure, parfaite pour les passionnés de cuisine. Retirez-vous dans la suite principale, un sanctuaire de détente avec un bain inspiré d'un spa et un balcon privé.",
+    "readMore": "Lire la suite",
+    "amenities": "Équipements",
+    "amenitiesList": {
+      "smartHome": "Système de Maison Intelligente",
+      "pool": "Piscine",
+      "heating": "Chauffage et Climatisation Centralisés",
+      "charging": "Recharge de Véhicule Électrique",
+      "gym": "Gymnase Privé",
+      "wine": "Cave à Vin"
+    },
+    "estimatedPayment": "Paiement Estimé",
+    "startingFrom": "À partir de",
+    "withDown": "avec 20% d'apport",
+    "calculateMortgage": "Calculer l'Hypothèque",
+    "agentTitle": "Agent le Mieux Noté"
+  },
+  "footer": {
+    "rights": "© 2026 LuxeEstate Inc. Tous droits réservés."
+  },
+  "common": {
+    "loading": "Chargement..."
+  }
+}
