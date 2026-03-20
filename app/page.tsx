@@ -10,26 +10,49 @@ import type { Property } from '../src/types/property';
 const PAGE_SIZE = 8;
 
 interface HomePageProps {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
 export default async function Home({ searchParams }: HomePageProps) {
-  const { page: pageParam } = await searchParams;
-  const currentPage = Math.max(1, parseInt(pageParam ?? '1', 10));
+  const params = await searchParams;
+  const currentPage = Math.max(1, parseInt(params.page ?? '1', 10));
   const offset = (currentPage - 1) * PAGE_SIZE;
 
-  // Fetch featured properties (not paginated - always show all)
-  const { data: featuredProperties } = await supabase
-    .from('properties')
-    .select('*')
-    .eq('is_featured', true)
-    .order('created_at', { ascending: true });
+  const activeCategory = params.category;
+  const activeSearch = params.q;
+  const hasFilters = !!(activeCategory || activeSearch);
 
-  // Fetch paginated "New in Market" properties with total count
-  const { data: newInMarket, count } = await supabase
+  // Fetch featured properties (not paginated - only show 2)
+  let featuredProperties: Property[] = [];
+  if (!hasFilters) {
+    const { data } = await supabase
+      .from('properties')
+      .select('*')
+      .eq('is_featured', true)
+      .order('created_at', { ascending: true })
+      .limit(2);
+    
+    if (data) featuredProperties = data;
+  }
+
+  // Fetch paginated "New in Market" properties
+  let query = supabase
     .from('properties')
-    .select('*', { count: 'exact' })
-    .eq('is_featured', false)
+    .select('*', { count: 'exact' });
+
+  if (hasFilters) {
+    if (activeCategory && activeCategory !== 'All') {
+      // Assuming category matches PropertyCategory (e.g. house, apartment)
+      query = query.ilike('category', activeCategory);
+    }
+    if (activeSearch) {
+      query = query.or(`title.ilike.%${activeSearch}%,location.ilike.%${activeSearch}%`);
+    }
+  } else {
+    query = query.eq('is_featured', false);
+  }
+
+  const { data: newInMarket, count } = await query
     .order('created_at', { ascending: true })
     .range(offset, offset + PAGE_SIZE - 1);
 
@@ -43,23 +66,25 @@ export default async function Home({ searchParams }: HomePageProps) {
         <HeroSection />
 
         {/* Featured Collections Section */}
-        <section className="mb-16">
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-light text-nordic-dark">Featured Collections</h2>
-              <p className="text-nordic-muted mt-1 text-sm">Curated properties for the discerning eye.</p>
+        {!hasFilters && featuredProperties.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-light text-nordic-dark">Featured Collections</h2>
+                <p className="text-nordic-muted mt-1 text-sm">Curated properties for the discerning eye.</p>
+              </div>
+              <a className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity" href="#">
+                View all <span className="material-icons text-sm">arrow_forward</span>
+              </a>
             </div>
-            <a className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity" href="#">
-              View all <span className="material-icons text-sm">arrow_forward</span>
-            </a>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {(featuredProperties as Property[])?.map((property) => (
-              <FeaturedPropertyCard key={property.id} property={property} />
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {featuredProperties.map((property) => (
+                <FeaturedPropertyCard key={property.id} property={property} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* New in Market Section */}
         <section>
