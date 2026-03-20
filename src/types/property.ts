@@ -5,6 +5,7 @@ export type PropertyCategory = "house" | "apartment" | "villa" | "penthouse";
 export interface Property {
   id: string;
   title: string;
+  slug?: string;
   location: string;
   price: number;
   price_label: string | null;
@@ -14,6 +15,7 @@ export interface Property {
   baths: number;
   area: number;
   image_url: string;
+  images?: string[];
   is_featured: boolean;
   tag: string | null;
   created_at: string;

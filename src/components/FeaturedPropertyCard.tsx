@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import type { Property } from '../types/property';
 
 interface FeaturedPropertyCardProps {
@@ -7,7 +8,7 @@ interface FeaturedPropertyCardProps {
 
 export default function FeaturedPropertyCard({ property }: FeaturedPropertyCardProps) {
   return (
-    <div className="group relative rounded-xl overflow-hidden shadow-soft bg-white cursor-pointer">
+    <Link href={`/properties/${property.slug}`} className="block group relative rounded-xl overflow-hidden shadow-soft bg-white cursor-pointer">
       <div className="aspect-4/3 w-full overflow-hidden relative">
         <img
           alt={property.title}
@@ -55,6 +56,6 @@ export default function FeaturedPropertyCard({ property }: FeaturedPropertyCardP
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
