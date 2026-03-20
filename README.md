@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Luxe Estate
 
-## Getting Started
+Welcome to **Luxe Estate**, a premium real estate application designed for showcasing and selling luxury properties.
 
-First, run the development server:
+## 🏢 Business Overview
+Luxe Estate is a modern web platform for high-end real estate listings. Our application provides an intuitive and luxurious experience for prospective buyers to:
+- Discover curated featured properties.
+- Search and filter properties based on specific criteria (e.g., bedrooms, bathrooms).
+- View rich property details with image galleries and an interactive map.
+- Browse the application in multiple languages (English, Spanish, and French).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🛠️ Technology Stack
+This platform has been built utilizing modern web technologies:
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **UI & Layouts**: React 19
+- **Maps**: [Leaflet](https://leafletjs.com/) and [React Leaflet](https://react-leaflet.js.org/) for interactive property locations
+- **Database Interface**: [Supabase](https://supabase.com/) for data and asset management
+- **Internationalization (i18n)**: Support for English, Spanish, and French
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To get a local copy up and running, follow these simple steps.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
+Make sure you have Node.js (v18 or higher) and a package manager installed (npm, yarn, pnpm, or bun).
 
-## Learn More
+### Installation
+1. Clone the repository and navigate to the project directory:
+   ```bash
+   git clone <your-repo-url>
+   cd luxe-estate
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Set up environment variables:
+   Copy the provided `.env.template` to a new `.env.local` file:
+   ```bash
+   cp .env.template .env.local
+   ```
+   Fill in your Supabase credentials in `.env.local`:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
 
-## Deploy on Vercel
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to explore the application.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📂 Project Structure Overview
+- `app/`: Next.js App Router structure, including i18n routing directories (`/[lang]/...`).
+- `public/`: Static assets like images and fonts.
+- `scripts/`: Helper scripts (e.g., database interactions/seeding).
+- `antigravity/`: Documentation and project guidelines (e.g., real estate best practices).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!
+
+---
+*Powered by Next.js and Supabase*
