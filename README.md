@@ -2,14 +2,14 @@
 
 Welcome to **Luxe Estate**, a premium real estate application designed for showcasing and selling luxury properties.
 
-## 🏢 Business Overview
+## Business Overview
 Luxe Estate is a modern web platform for high-end real estate listings. Our application provides an intuitive and luxurious experience for prospective buyers to:
 - Discover curated featured properties.
 - Search and filter properties based on specific criteria (e.g., bedrooms, bathrooms).
 - View rich property details with image galleries and an interactive map.
 - Browse the application in multiple languages (English, Spanish, and French).
 
-## 🛠️ Technology Stack
+## Technology Stack
 This platform has been built utilizing modern web technologies:
 - **Framework**: [Next.js](https://nextjs.org/) (App Router)
 - **Language**: TypeScript
@@ -19,7 +19,7 @@ This platform has been built utilizing modern web technologies:
 - **Database Interface**: [Supabase](https://supabase.com/) for data and asset management
 - **Internationalization (i18n)**: Support for English, Spanish, and French
 
-## 🚀 Getting Started
+## Getting Started
 
 To get a local copy up and running, follow these simple steps.
 
@@ -64,13 +64,13 @@ Make sure you have Node.js (v18 or higher) and a package manager installed (npm,
 
 5. Open [http://localhost:3000](http://localhost:3000) with your browser to explore the application.
 
-## 📂 Project Structure Overview
+## Project Structure Overview
 - `app/`: Next.js App Router structure, including i18n routing directories (`/[lang]/...`).
 - `public/`: Static assets like images and fonts.
 - `scripts/`: Helper scripts (e.g., database interactions/seeding).
 - `antigravity/`: Documentation and project guidelines (e.g., real estate best practices).
 
-## 🤝 Contributing
+## Contributing
 Contributions, issues, and feature requests are welcome!
 
 ---
