@@ -4,6 +4,7 @@ import { createClient } from '@/src/lib/supabase/server'
 import { getDictionary } from '@/src/lib/dictionaries'
 import { type Locale } from '@/src/lib/i18n'
 import AdminSidebar from '@/src/components/admin/AdminSidebar'
+import AdminUserMenu from '@/src/components/admin/AdminUserMenu'
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -48,26 +49,12 @@ export default async function AdminLayout({ children, params }: AdminLayoutProps
         {/* Top bar */}
         <header className="bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between">
           <div />
-          <div className="flex items-center gap-3">
-            {user.user_metadata?.avatar_url ? (
-              <img
-                src={user.user_metadata.avatar_url}
-                alt="Profile"
-                referrerPolicy="no-referrer"
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-mosque/20"
-              />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-mosque flex items-center justify-center text-white text-xs font-semibold">
-                {(user.user_metadata?.full_name || user.email || '?')[0].toUpperCase()}
-              </div>
-            )}
-            <div className="hidden sm:block">
-              <p className="text-sm font-medium text-nordic-dark leading-none">
-                {user.user_metadata?.full_name || user.user_metadata?.name || 'Admin'}
-              </p>
-              <p className="text-xs text-nordic-dark/50 mt-0.5">{user.email}</p>
-            </div>
-          </div>
+          <AdminUserMenu
+            email={user.email ?? ''}
+            fullName={user.user_metadata?.full_name || user.user_metadata?.name || 'Admin'}
+            avatarUrl={user.user_metadata?.avatar_url ?? null}
+            signOutLabel={dict.navbar.signOut}
+          />
         </header>
 
         {/* Page content */}
