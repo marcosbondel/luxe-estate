@@ -2,6 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import Navbar from '../../../../src/components/Navbar';
 import { supabase } from '../../../../src/lib/supabase';
+import { createClient } from '../../../../src/lib/supabase/server';
 import type { Property } from '../../../../src/types/property';
 import MapLoader from '../../../../src/components/MapLoader';
 
@@ -11,6 +12,15 @@ import { type Locale } from '../../../../src/lib/i18n';
 export default async function PropertyDetailsPage({ params }: { params: Promise<{ slug: string, lang: string }> }) {
   const { slug, lang } = await params;
   const dict = await getDictionary(lang as Locale);
+
+  // Fetch authenticated user (if logged in)
+  const supabaseAuth = await createClient();
+  const { data: { user } } = await supabaseAuth.auth.getUser();
+  const navbarUser = user ? {
+    email: user.email,
+    avatar_url: user.user_metadata?.avatar_url,
+    full_name: user.user_metadata?.full_name || user.user_metadata?.name,
+  } : null;
 
   // Fetch the property by slug
   const { data: property, error } = await supabase
@@ -28,7 +38,7 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
 
   return (
     <>
-      <Navbar dict={dict.navbar} />
+      <Navbar dict={dict.navbar} user={navbarUser} lang={lang} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
           <div className="lg:col-span-8 space-y-4">

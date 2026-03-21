@@ -3,7 +3,9 @@
     "buy": "Buy",
     "rent": "Rent",
     "sell": "Sell",
-    "savedHomes": "Saved Homes"
+    "savedHomes": "Saved Homes",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
   },
   "hero": {
     "findYour": "Find your",
@@ -62,5 +64,58 @@
   },
   "common": {
     "loading": "Loading..."
+  },
+  "admin": {
+    "sidebar": {
+      "title": "Admin Panel",
+      "dashboard": "Dashboard",
+      "properties": "Properties",
+      "users": "Users",
+      "backToSite": "Back to Site"
+    },
+    "overview": "Overview",
+    "overviewSubtitle": "Welcome to the admin panel.",
+    "propertiesSubtitle": "View and manage all listings.",
+    "usersSubtitle": "Manage user access and roles.",
+    "stats": {
+      "totalProperties": "Total Properties",
+      "totalUsers": "Total Users",
+      "admins": "Administrators",
+      "agents": "Agents"
+    },
+    "properties": {
+      "total": "properties",
+      "searchPlaceholder": "Search by title or location…",
+      "allTypes": "All Types",
+      "forSale": "For Sale",
+      "forRent": "For Rent",
+      "filter": "Filter",
+      "clearFilters": "Clear",
+      "colProperty": "Property",
+      "colType": "Type",
+      "colPrice": "Price",
+      "colCategory": "Category",
+      "colFeatured": "Featured",
+      "noResults": "No properties found.",
+      "page": "Page",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "users": {
+      "total": "users",
+      "colUser": "User",
+      "colRole": "Role",
+      "colJoined": "Joined",
+      "colActions": "Actions",
+      "noUsers": "No users found.",
+      "unknownUser": "Unknown User",
+      "updateRole": "Update role",
+      "saving": "Saving…",
+      "roles": {
+        "admin": "Admin",
+        "agent": "Agent",
+        "user": "User"
+      }
+    }
   }
 }

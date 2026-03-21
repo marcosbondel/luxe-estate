@@ -5,6 +5,7 @@ import FeaturedPropertyCard from '../../src/components/FeaturedPropertyCard';
 import PropertyCard from '../../src/components/PropertyCard';
 import Pagination from '../../src/components/Pagination';
 import { supabase } from '../../src/lib/supabase';
+import { createClient } from '../../src/lib/supabase/server';
 import type { Property } from '../../src/types/property';
 import { getDictionary } from '../../src/lib/dictionaries';
 import { type Locale } from '../../src/lib/i18n';
@@ -19,6 +20,15 @@ interface HomePageProps {
 export default async function Home({ params, searchParams }: HomePageProps) {
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
+
+  // Fetch authenticated user (if logged in)
+  const supabaseAuth = await createClient();
+  const { data: { user } } = await supabaseAuth.auth.getUser();
+  const navbarUser = user ? {
+    email: user.email,
+    avatar_url: user.user_metadata?.avatar_url,
+    full_name: user.user_metadata?.full_name || user.user_metadata?.name,
+  } : null;
   const searchValues = await searchParams;
   const currentPage = Math.max(1, parseInt(searchValues.page ?? '1', 10));
   const offset = (currentPage - 1) * PAGE_SIZE;
@@ -65,7 +75,7 @@ export default async function Home({ params, searchParams }: HomePageProps) {
 
   return (
     <>
-      <Navbar dict={dict.navbar} />
+      <Navbar dict={dict.navbar} user={navbarUser} lang={lang} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <HeroSection dict={dict.hero} />

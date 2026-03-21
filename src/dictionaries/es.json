@@ -3,7 +3,9 @@
     "buy": "Comprar",
     "rent": "Rentar",
     "sell": "Vender",
-    "savedHomes": "Casas Guardadas"
+    "savedHomes": "Casas Guardadas",
+    "signIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión"
   },
   "hero": {
     "findYour": "Encuentra tu",
@@ -62,5 +64,58 @@
   },
   "common": {
     "loading": "Cargando..."
+  },
+  "admin": {
+    "sidebar": {
+      "title": "Panel Admin",
+      "dashboard": "Panel",
+      "properties": "Propiedades",
+      "users": "Usuarios",
+      "backToSite": "Volver al sitio"
+    },
+    "overview": "Resumen",
+    "overviewSubtitle": "Bienvenido al panel de administración.",
+    "propertiesSubtitle": "Visualiza y gestiona todos los listados.",
+    "usersSubtitle": "Gestiona accesos y roles de usuarios.",
+    "stats": {
+      "totalProperties": "Total Propiedades",
+      "totalUsers": "Total Usuarios",
+      "admins": "Administradores",
+      "agents": "Agentes"
+    },
+    "properties": {
+      "total": "propiedades",
+      "searchPlaceholder": "Buscar por título o ubicación…",
+      "allTypes": "Todos los tipos",
+      "forSale": "En Venta",
+      "forRent": "En Renta",
+      "filter": "Filtrar",
+      "clearFilters": "Limpiar",
+      "colProperty": "Propiedad",
+      "colType": "Tipo",
+      "colPrice": "Precio",
+      "colCategory": "Categoría",
+      "colFeatured": "Destacada",
+      "noResults": "No se encontraron propiedades.",
+      "page": "Página",
+      "prev": "Anterior",
+      "next": "Siguiente"
+    },
+    "users": {
+      "total": "usuarios",
+      "colUser": "Usuario",
+      "colRole": "Rol",
+      "colJoined": "Registro",
+      "colActions": "Acciones",
+      "noUsers": "No se encontraron usuarios.",
+      "unknownUser": "Usuario desconocido",
+      "updateRole": "Actualizar rol",
+      "saving": "Guardando…",
+      "roles": {
+        "admin": "Admin",
+        "agent": "Agente",
+        "user": "Usuario"
+      }
+    }
   }
 }
