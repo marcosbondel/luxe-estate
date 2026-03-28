@@ -27,6 +27,7 @@ export default async function PropertyDetailsPage({ params }: { params: Promise<
     .from('properties')
     .select('*')
     .eq('slug', slug)
+    .eq('is_active', true)
     .single();
 
   if (error || !property) {

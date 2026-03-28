@@ -40,6 +40,7 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
   const [baths, setBaths] = useState(initialData?.baths ?? 2)
   const [parking, setParking] = useState(1) // HTML UI only
   const [isFeatured, setIsFeatured] = useState(initialData?.is_featured ?? false)
+  const [isActive, setIsActive] = useState(initialData?.is_active ?? true)
   const [tag, setTag] = useState(initialData?.tag ?? '')
 
   // Non-DB amenities from HTML
@@ -104,6 +105,7 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
       baths,
       area: Number(area || 0),
       is_featured: isFeatured,
+      is_active: isActive,
       tag: tag || null,
       images,
     }
@@ -275,7 +277,18 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <label className="flex items-center gap-2.5 cursor-pointer group pt-8">
+                    <input 
+                      type="checkbox" 
+                      className="w-5 h-5 border-gray-300 rounded focus:ring-mosque text-mosque"
+                      checked={isActive}
+                      onChange={(e) => setIsActive(e.target.checked)}
+                    />
+                    <span className="text-sm font-bold sm:whitespace-nowrap text-nordic font-sf-pro">
+                      Active
+                    </span>
+                  </label>
                   <label className="flex items-center gap-2.5 cursor-pointer group pt-8">
                     <input 
                       type="checkbox" 
@@ -283,7 +296,7 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                       checked={isFeatured}
                       onChange={(e) => setIsFeatured(e.target.checked)}
                     />
-                    <span className="text-sm font-bold text-nordic font-sf-pro">{t.isFeatured}</span>
+                    <span className="text-sm font-bold text-nordic font-sf-pro sm:whitespace-nowrap">{t.isFeatured}</span>
                   </label>
                   <div>
                     <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="tag">{t.tagLabel}</label>

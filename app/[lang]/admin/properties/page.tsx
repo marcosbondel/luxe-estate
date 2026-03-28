@@ -137,9 +137,16 @@ export default async function AdminPropertiesPage({ params, searchParams }: Admi
                     </div>
                   )}
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-nordic-dark truncate group-hover:text-mosque transition-colors">
-                      {property.title}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-nordic-dark truncate group-hover:text-mosque transition-colors">
+                        {property.title}
+                      </p>
+                      {property.is_active === false && (
+                        <span className="px-1.5 py-0.5 rounded bg-red-100 text-red-700 text-[10px] font-bold uppercase tracking-wider shrink-0">
+                          Inactive
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-nordic-dark/50 truncate mt-0.5">
                       {property.location}
                     </p>

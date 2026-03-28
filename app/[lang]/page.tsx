@@ -43,6 +43,7 @@ export default async function Home({ params, searchParams }: HomePageProps) {
     const { data } = await supabase
       .from('properties')
       .select('*')
+      .eq('is_active', true)
       .eq('is_featured', true)
       .order('created_at', { ascending: true })
       .limit(2);
@@ -53,7 +54,8 @@ export default async function Home({ params, searchParams }: HomePageProps) {
   // Fetch paginated "New in Market" properties
   let query = supabase
     .from('properties')
-    .select('*', { count: 'exact' });
+    .select('*', { count: 'exact' })
+    .eq('is_active', true);
 
   if (hasFilters) {
     if (activeCategory && activeCategory !== 'All') {
