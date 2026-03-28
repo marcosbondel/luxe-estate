@@ -1,9 +1,15 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { supabase } from '@/src/lib/supabase'
 import { uploadPropertyImage, deletePropertyImage } from '@/src/lib/storage'
+
+const PropertyMap = dynamic(() => import('@/src/components/PropertyMap'), { 
+  ssr: false, 
+  loading: () => <div className="h-48 w-full bg-slate-100 flex items-center justify-center animate-pulse rounded-lg">Loading map...</div> 
+})
 import { type Property, type PropertyType, type PropertyCategory } from '@/src/types/property'
 import { type Locale } from '@/src/lib/i18n'
 
@@ -26,6 +32,8 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
   const [category, setCategory] = useState<PropertyCategory | 'commercial'>(initialData?.category ?? 'apartment')
   const [description, setDescription] = useState('') // HTML UI only
   const [location, setLocation] = useState(initialData?.location ?? '')
+  const [latitude, setLatitude] = useState(initialData?.latitude?.toString() ?? '')
+  const [longitude, setLongitude] = useState(initialData?.longitude?.toString() ?? '')
   const [area, setArea] = useState(initialData?.area?.toString() ?? '')
   const [yearBuilt, setYearBuilt] = useState('') // HTML UI only
   const [beds, setBeds] = useState(initialData?.beds ?? 3)
@@ -90,6 +98,8 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
       type: status,
       category: category === 'commercial' ? null : category as PropertyCategory,
       location,
+      latitude: latitude ? Number(latitude) : null,
+      longitude: longitude ? Number(longitude) : null,
       beds,
       baths,
       area: Number(area || 0),
@@ -414,13 +424,45 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                     required
                   />
                 </div>
-                <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200 group">
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-emerald-50 text-emerald-600">
-                    <span className="bg-white/90 text-nordic px-3 py-1.5 rounded shadow-sm backdrop-blur-sm text-xs font-bold font-sf-pro flex items-center gap-1">
-                      <span className="material-icons text-sm text-mosque">map</span> {t.previewMap}
-                    </span>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-gray-500 font-medium font-sf-pro mb-1 block" htmlFor="latitude">Latitude</label>
+                    <input 
+                      className="w-full px-3 py-2 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro" 
+                      id="latitude" 
+                      placeholder="e.g. 37.4419" 
+                      type="number"
+                      step="any"
+                      value={latitude}
+                      onChange={(e) => setLatitude(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 font-medium font-sf-pro mb-1 block" htmlFor="longitude">Longitude</label>
+                    <input 
+                      className="w-full px-3 py-2 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro" 
+                      id="longitude" 
+                      placeholder="e.g. -122.1430" 
+                      type="number"
+                      step="any"
+                      value={longitude}
+                      onChange={(e) => setLongitude(e.target.value)}
+                    />
                   </div>
                 </div>
+                {latitude && longitude ? (
+                  <div className="h-48 w-full rounded-lg overflow-hidden border border-gray-200">
+                    <PropertyMap lat={Number(latitude)} lng={Number(longitude)} popupText={title || "Property Location"} />
+                  </div>
+                ) : (
+                  <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200 group">
+                    <div className="absolute inset-0 flex items-center justify-center bg-emerald-50 text-emerald-600">
+                      <span className="bg-white/90 text-nordic px-3 py-1.5 rounded shadow-sm backdrop-blur-sm text-xs font-bold font-sf-pro flex items-center gap-1">
+                        <span className="material-icons text-sm text-mosque">map</span> Enter coordinates to {t.previewMap.toLowerCase()}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -17,6 +17,8 @@ export interface Property {
   images: string[];
   is_featured: boolean;
   tag: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   created_at: string;
 }
 
