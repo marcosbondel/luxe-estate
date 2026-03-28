@@ -99,7 +99,8 @@
       "noResults": "Aucune propriété trouvée.",
       "page": "Page",
       "prev": "Précédent",
-      "next": "Suivant"
+      "next": "Suivant",
+      "addProperty": "Ajouter une Nouvelle Propriété"
     },
     "users": {
       "total": "utilisateurs",
@@ -116,6 +117,44 @@
         "agent": "Agent",
         "user": "Utilisateur"
       }
+    },
+    "propertyForm": {
+      "addTitle": "Ajouter une Nouvelle Propriété",
+      "addSubtitle": "Remplissez les détails ci-dessous pour créer une nouvelle annonce. Les champs marqués d'un * sont obligatoires.",
+      "editTitle": "Modifier la Propriété",
+      "editSubtitle": "Mettez à jour les détails de l'annonce de la propriété.",
+      "saveDraft": "Enregistrer le Brouillon",
+      "saveProperty": "Enregistrer la Propriété",
+      "updateProperty": "Mettre à jour la Propriété",
+      "cancel": "Annuler",
+      "saving": "Enregistrement...",
+      "basicInfo": "Informations de Base",
+      "titleLabel": "Titre de la Propriété *",
+      "titlePlaceholder": "ex. Penthouse Moderne avec Vue sur l'Océan",
+      "priceLabel": "Prix *",
+      "statusLabel": "Statut",
+      "typeLabel": "Catégorie de Propriété",
+      "description": "Description",
+      "descriptionPlaceholder": "Décrivez les caractéristiques de la propriété, le quartier et les points de vente uniques...",
+      "gallery": "Galerie",
+      "galleryDrag": "Cliquez ou glissez les images ici",
+      "gallerySize": "Taille max 5Mo par image",
+      "location": "Emplacement",
+      "locationLabel": "Adresse",
+      "locationPlaceholder": "Rue, Ville, Code Postal",
+      "previewMap": "Aperçu de la Carte",
+      "details": "Détails",
+      "areaLabel": "Surface (m²)",
+      "bedroomsLabel": "Chambres",
+      "bathroomsLabel": "Salles de bain",
+      "isFeatured": "Propriété en Vedette ?",
+      "tagLabel": "Étiquette",
+      "tagPlaceholder": "ex. Premium, Nouveau",
+      "priceLabelInput": "Étiquette de Prix (ex. /mois)",
+      "priceLabelPlaceholder": "/mois",
+      "successCreate": "Propriété créée avec succès",
+      "successUpdate": "Propriété mise à jour avec succès",
+      "errorMsg": "Erreur lors de l'enregistrement"
     }
   }
 }

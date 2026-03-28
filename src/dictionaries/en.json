@@ -99,7 +99,8 @@
       "noResults": "No properties found.",
       "page": "Page",
       "prev": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "addProperty": "Add New Property"
     },
     "users": {
       "total": "users",
@@ -116,6 +117,44 @@
         "agent": "Agent",
         "user": "User"
       }
+    },
+    "propertyForm": {
+      "addTitle": "Add New Property",
+      "addSubtitle": "Fill in the details below to create a new listing. Fields marked with * are mandatory.",
+      "editTitle": "Edit Property",
+      "editSubtitle": "Update the details of the property listing.",
+      "saveDraft": "Save Draft",
+      "saveProperty": "Save Property",
+      "updateProperty": "Update Property",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "basicInfo": "Basic Information",
+      "titleLabel": "Property Title *",
+      "titlePlaceholder": "e.g. Modern Penthouse with Ocean View",
+      "priceLabel": "Price *",
+      "statusLabel": "Status",
+      "typeLabel": "Property Category",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe the property features, neighborhood, and unique selling points...",
+      "gallery": "Gallery",
+      "galleryDrag": "Click or drag images here",
+      "gallerySize": "Max file size 5MB per image",
+      "location": "Location",
+      "locationLabel": "Address",
+      "locationPlaceholder": "Street Address, City, Zip",
+      "previewMap": "Preview map",
+      "details": "Details",
+      "areaLabel": "Area (m²)",
+      "bedroomsLabel": "Bedrooms",
+      "bathroomsLabel": "Bathrooms",
+      "isFeatured": "Is Featured Property?",
+      "tagLabel": "Tag",
+      "tagPlaceholder": "e.g. Premium, New",
+      "priceLabelInput": "Price Label (e.g. /mo)",
+      "priceLabelPlaceholder": "/mo",
+      "successCreate": "Property created successfully",
+      "successUpdate": "Property updated successfully",
+      "errorMsg": "Error saving property"
     }
   }
 }

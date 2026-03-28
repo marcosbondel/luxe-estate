@@ -53,6 +53,13 @@ export default async function AdminPropertiesPage({ params, searchParams }: Admi
             {count ?? 0} {t.properties.total}
           </p>
         </div>
+        <Link
+          href={`/${lang}/admin/properties/create`}
+          className="px-5 py-2.5 bg-mosque hover:bg-nordic-dark text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+        >
+          <span className="material-icons text-sm">add</span>
+          {t.properties.addProperty ?? 'Add Property'}
+        </Link>
       </div>
 
       {/* Filters */}
@@ -156,13 +163,19 @@ export default async function AdminPropertiesPage({ params, searchParams }: Admi
                   {property.category ?? '—'}
                 </div>
 
-                {/* Featured */}
-                <div className="col-span-1 flex justify-end">
+                <div className="col-span-1 flex justify-end gap-2">
                   {property.is_featured ? (
                     <span className="material-icons text-mosque text-xl" title="Featured">star</span>
                   ) : (
                     <span className="material-icons text-gray-200 text-xl" title="Not featured">star_border</span>
                   )}
+                  <Link 
+                    href={`/${lang}/admin/properties/${property.id}`}
+                    className="p-1 text-gray-400 hover:text-mosque transition-colors"
+                    title={(t as any).propertyForm?.editTitle ?? 'Edit Property'}
+                  >
+                    <span className="material-icons text-xl">edit</span>
+                  </Link>
                 </div>
               </div>
             ))}

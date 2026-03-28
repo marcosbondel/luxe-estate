@@ -99,7 +99,8 @@
       "noResults": "No se encontraron propiedades.",
       "page": "Página",
       "prev": "Anterior",
-      "next": "Siguiente"
+      "next": "Siguiente",
+      "addProperty": "Añadir Nueva Propiedad"
     },
     "users": {
       "total": "usuarios",
@@ -116,6 +117,44 @@
         "agent": "Agente",
         "user": "Usuario"
       }
+    },
+    "propertyForm": {
+      "addTitle": "Añadir Nueva Propiedad",
+      "addSubtitle": "Llena los detalles a continuación para crear un nuevo listado. Los campos con * son obligatorios.",
+      "editTitle": "Editar Propiedad",
+      "editSubtitle": "Actualiza los detalles del listado de la propiedad.",
+      "saveDraft": "Guardar Borrador",
+      "saveProperty": "Guardar Propiedad",
+      "updateProperty": "Actualizar Propiedad",
+      "cancel": "Cancelar",
+      "saving": "Guardando...",
+      "basicInfo": "Información Básica",
+      "titleLabel": "Título de la Propiedad *",
+      "titlePlaceholder": "ej. Penthouse Moderno con Vista al Mar",
+      "priceLabel": "Precio *",
+      "statusLabel": "Estado",
+      "typeLabel": "Categoría de Propiedad",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Describe las características de la propiedad, vecindario y puntos de venta atractivos...",
+      "gallery": "Galería",
+      "galleryDrag": "Haz clic o arrastra imágenes aquí",
+      "gallerySize": "Tamaño máximo 5MB por imagen",
+      "location": "Ubicación",
+      "locationLabel": "Dirección",
+      "locationPlaceholder": "Calle, Ciudad, Código Postal",
+      "previewMap": "Vista de Mapa",
+      "details": "Detalles",
+      "areaLabel": "Área (m²)",
+      "bedroomsLabel": "Recámaras",
+      "bathroomsLabel": "Baños",
+      "isFeatured": "¿Es una Propiedad Destacada?",
+      "tagLabel": "Etiqueta",
+      "tagPlaceholder": "ej. Premium, Nuevo",
+      "priceLabelInput": "Etiqueta de Precio (ej. /mes)",
+      "priceLabelPlaceholder": "/mes",
+      "successCreate": "Propiedad creada exitosamente",
+      "successUpdate": "Propiedad actualizada exitosamente",
+      "errorMsg": "Error al guardar la propiedad"
     }
   }
 }
