@@ -47,7 +47,7 @@ export default async function AdminUsersPage({ params }: AdminUsersPageProps) {
 
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
-          {error}
+          {error.message}
         </div>
       )}
 
