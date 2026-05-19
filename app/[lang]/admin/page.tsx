@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { createAdminClient } from '@/src/lib/supabase/admin'
-import { supabase } from '@/src/lib/supabase'
+import { mockProperties, mockUsers } from '@/src/data/mockProperties'
 import { getDictionary } from '@/src/lib/dictionaries'
 import { type Locale } from '@/src/lib/i18n'
 
@@ -13,46 +12,36 @@ export default async function AdminPage({ params }: AdminPageProps) {
   const dict = await getDictionary(lang as Locale)
   const t = dict.admin
 
-  // Stats
-  const adminClient = createAdminClient()
-
-  const [
-    { count: totalUsers },
-    { count: totalProperties },
-    { count: adminCount },
-    { count: agentCount },
-  ] = await Promise.all([
-    adminClient.from('user_roles').select('*', { count: 'exact', head: true }),
-    supabase.from('properties').select('*', { count: 'exact', head: true }),
-    adminClient.from('user_roles').select('*', { count: 'exact', head: true }).eq('role', 'admin'),
-    adminClient.from('user_roles').select('*', { count: 'exact', head: true }).eq('role', 'agent'),
-  ])
+  const totalProperties = mockProperties.length
+  const totalUsers = mockUsers.length
+  const adminCount = mockUsers.filter(u => u.role === 'admin').length
+  const agentCount = mockUsers.filter(u => u.role === 'agent').length
 
   const stats = [
     {
       label: t.stats.totalProperties,
-      value: totalProperties ?? 0,
+      value: totalProperties,
       icon: 'apartment',
       href: `/${lang}/admin/properties`,
       color: 'bg-mosque/10 text-mosque',
     },
     {
       label: t.stats.totalUsers,
-      value: totalUsers ?? 0,
+      value: totalUsers,
       icon: 'group',
       href: `/${lang}/admin/users`,
       color: 'bg-blue-50 text-blue-600',
     },
     {
       label: t.stats.admins,
-      value: adminCount ?? 0,
+      value: adminCount,
       icon: 'shield',
       href: `/${lang}/admin/users`,
       color: 'bg-nordic-dark/10 text-nordic-dark',
     },
     {
       label: t.stats.agents,
-      value: agentCount ?? 0,
+      value: agentCount,
       icon: 'support_agent',
       href: `/${lang}/admin/users`,
       color: 'bg-amber-50 text-amber-600',
@@ -84,7 +73,6 @@ export default async function AdminPage({ params }: AdminPageProps) {
         ))}
       </div>
 
-      {/* Quick links */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
         <Link
           href={`/${lang}/admin/properties`}

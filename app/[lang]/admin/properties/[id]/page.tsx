@@ -1,7 +1,7 @@
 import { getDictionary } from '@/src/lib/dictionaries'
 import { type Locale } from '@/src/lib/i18n'
 import PropertyForm from '@/src/components/admin/PropertyForm'
-import { supabase } from '@/src/lib/supabase'
+import { mockProperties } from '@/src/data/mockProperties'
 import { notFound } from 'next/navigation'
 
 interface EditPropertyPageProps {
@@ -12,14 +12,9 @@ export default async function EditPropertyPage({ params }: EditPropertyPageProps
   const { lang, id } = await params
   const dict = await getDictionary(lang as Locale)
 
-  const { data: property, error } = await supabase
-    .from('properties')
-    .select('*')
-    .eq('id', id)
-    .single()
+  const property = mockProperties.find(p => p.id === id)
 
-  if (error || !property) {
-    console.error('Error fetching property:', error)
+  if (!property) {
     notFound()
   }
 

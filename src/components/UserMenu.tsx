@@ -2,8 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { createClient } from '@/src/lib/supabase/client'
-import { useRouter } from 'next/navigation'
 
 interface UserMenuProps {
   user?: {
@@ -16,10 +14,9 @@ interface UserMenuProps {
   signOut?: string;
 }
 
-export default function UserMenu({ user, lang = 'en', signIn = 'Sign In', signOut = 'Sign Out' }: UserMenuProps) {
+export default function UserMenu({ user, lang = 'en', signIn = 'Sign In' }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -31,14 +28,6 @@ export default function UserMenu({ user, lang = 'en', signIn = 'Sign In', signOu
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleSignOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    setIsOpen(false)
-    router.refresh()
-  }
-
-  // Not logged in → show sign in link
   if (!user) {
     return (
       <Link
@@ -51,7 +40,6 @@ export default function UserMenu({ user, lang = 'en', signIn = 'Sign In', signOu
     )
   }
 
-  // Get initials for fallback avatar
   const initials = user.full_name
     ? user.full_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
     : user.email
@@ -78,24 +66,12 @@ export default function UserMenu({ user, lang = 'en', signIn = 'Sign In', signOu
         )}
       </button>
 
-      {/* Dropdown menu */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
           <div className="px-4 py-2 border-b border-gray-100">
-            <p className="text-sm font-medium text-nordic-dark truncate">
-              {user.full_name || 'User'}
-            </p>
-            <p className="text-xs text-nordic-dark/60 truncate">
-              {user.email}
-            </p>
+            <p className="text-sm font-medium text-nordic-dark truncate">{user.full_name || 'User'}</p>
+            <p className="text-xs text-nordic-dark/60 truncate">{user.email}</p>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2 cursor-pointer"
-          >
-            <span className="material-icons text-lg">logout</span>
-            {signOut}
-          </button>
         </div>
       )}
     </div>

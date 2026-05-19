@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/src/lib/supabase/admin'
+import { mockUsers } from '@/src/data/mockProperties'
 import { getDictionary } from '@/src/lib/dictionaries'
 import { type Locale } from '@/src/lib/i18n'
 import RoleSelector from '@/src/components/admin/RoleSelector'
@@ -25,17 +25,10 @@ export default async function AdminUsersPage({ params }: AdminUsersPageProps) {
   const dict = await getDictionary(lang as Locale)
   const t = dict.admin
 
-  const adminClient = createAdminClient()
-  const { data: users, error } = await adminClient
-    .from('user_roles')
-    .select('*')
-    .order('created_at', { ascending: false })
-
-  const userList = users ?? []
+  const userList = mockUsers
 
   return (
     <div>
-      {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-nordic-dark">{t.sidebar.users}</h1>
@@ -45,13 +38,6 @@ export default async function AdminUsersPage({ params }: AdminUsersPageProps) {
         </div>
       </div>
 
-      {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
-          {error.message}
-        </div>
-      )}
-
-      {/* Column headers */}
       <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-nordic-dark/40 mb-2">
         <div className="col-span-5">{t.users.colUser}</div>
         <div className="col-span-3">{t.users.colRole}</div>
@@ -90,7 +76,6 @@ export default async function AdminUsersPage({ params }: AdminUsersPageProps) {
                     : 'bg-white border-gray-100 shadow-sm hover:bg-[#EEF6F6]'
                 }`}
               >
-                {/* User info */}
                 <div className="col-span-5 flex items-center gap-4 w-full">
                   <div className="relative shrink-0">
                     {userRow.avatar_url ? (
@@ -119,7 +104,6 @@ export default async function AdminUsersPage({ params }: AdminUsersPageProps) {
                   </div>
                 </div>
 
-                {/* Current role badge */}
                 <div className="col-span-3 w-full flex items-center gap-3">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium ${ROLE_BADGE[role]}`}>
                     <span className="material-icons text-[14px]">{ROLE_ICON[role]}</span>
@@ -127,12 +111,10 @@ export default async function AdminUsersPage({ params }: AdminUsersPageProps) {
                   </span>
                 </div>
 
-                {/* Joined date */}
                 <div className="col-span-2 text-xs text-nordic-dark/50">
                   {joinedDate}
                 </div>
 
-                {/* Role selector */}
                 <div className="col-span-2 flex justify-end w-full">
                   <RoleSelector
                     userId={userRow.user_id}

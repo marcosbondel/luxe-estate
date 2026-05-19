@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createClient } from '@/src/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 interface AdminUserMenuProps {
@@ -25,12 +24,6 @@ export default function AdminUserMenu({ email, fullName, avatarUrl, signOutLabel
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
-
-  const handleSignOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/')
-  }
 
   const initials = fullName
     ? fullName.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
@@ -58,8 +51,10 @@ export default function AdminUserMenu({ email, fullName, avatarUrl, signOutLabel
           <p className="text-sm font-medium text-nordic-dark leading-none">{fullName}</p>
           <p className="text-xs text-nordic-dark/50 mt-0.5">{email}</p>
         </div>
-        <span className="material-icons text-nordic-dark/30 text-[18px] hidden sm:block transition-transform duration-200"
-          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+        <span
+          className="material-icons text-nordic-dark/30 text-[18px] hidden sm:block transition-transform duration-200"
+          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+        >
           expand_more
         </span>
       </button>
@@ -71,7 +66,7 @@ export default function AdminUserMenu({ email, fullName, avatarUrl, signOutLabel
             <p className="text-xs text-nordic-dark/50 truncate">{email}</p>
           </div>
           <button
-            onClick={handleSignOut}
+            onClick={() => router.push('/')}
             className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
           >
             <span className="material-icons text-[18px]">logout</span>

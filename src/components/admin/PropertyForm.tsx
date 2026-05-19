@@ -3,12 +3,10 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { supabase } from '@/src/lib/supabase'
-import { uploadPropertyImage, deletePropertyImage } from '@/src/lib/storage'
 
-const PropertyMap = dynamic(() => import('@/src/components/PropertyMap'), { 
-  ssr: false, 
-  loading: () => <div className="h-48 w-full bg-slate-100 flex items-center justify-center animate-pulse rounded-lg">Loading map...</div> 
+const PropertyMap = dynamic(() => import('@/src/components/PropertyMap'), {
+  ssr: false,
+  loading: () => <div className="h-48 w-full bg-slate-100 flex items-center justify-center animate-pulse rounded-lg">Loading map...</div>
 })
 import { type Property, type PropertyType, type PropertyCategory } from '@/src/types/property'
 import { type Locale } from '@/src/lib/i18n'
@@ -24,26 +22,24 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
   const t = dict.admin.propertyForm
   const isEdit = !!initialData
 
-  // Form states matching DB + HTML
   const [title, setTitle] = useState(initialData?.title ?? '')
   const [price, setPrice] = useState(initialData?.price?.toString() ?? '')
   const [priceLabel, setPriceLabel] = useState(initialData?.price_label ?? '')
   const [status, setStatus] = useState<PropertyType>(initialData?.type ?? 'sale')
   const [category, setCategory] = useState<PropertyCategory | 'commercial'>(initialData?.category ?? 'apartment')
-  const [description, setDescription] = useState('') // HTML UI only
+  const [description, setDescription] = useState('')
   const [location, setLocation] = useState(initialData?.location ?? '')
   const [latitude, setLatitude] = useState(initialData?.latitude?.toString() ?? '')
   const [longitude, setLongitude] = useState(initialData?.longitude?.toString() ?? '')
   const [area, setArea] = useState(initialData?.area?.toString() ?? '')
-  const [yearBuilt, setYearBuilt] = useState('') // HTML UI only
+  const [yearBuilt, setYearBuilt] = useState('')
   const [beds, setBeds] = useState(initialData?.beds ?? 3)
   const [baths, setBaths] = useState(initialData?.baths ?? 2)
-  const [parking, setParking] = useState(1) // HTML UI only
+  const [parking, setParking] = useState(1)
   const [isFeatured, setIsFeatured] = useState(initialData?.is_featured ?? false)
   const [isActive, setIsActive] = useState(initialData?.is_active ?? true)
   const [tag, setTag] = useState(initialData?.tag ?? '')
 
-  // Non-DB amenities from HTML
   const [amenities, setAmenities] = useState({
     swimmingPool: false,
     garden: true,
@@ -52,88 +48,42 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
   })
 
   const [images, setImages] = useState<string[]>(initialData?.images ?? [])
-  const [isUploading, setIsUploading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Drag and drop handlers
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
     const files = Array.from(e.target.files)
-    
-    setIsUploading(true)
     const newUrls: string[] = []
-    
     for (const file of files) {
-      if (file.size > 5 * 1024 * 1024) continue // Skip > 5MB
-      const url = await uploadPropertyImage(file)
-      if (url) newUrls.push(url)
+      const url = await new Promise<string>((resolve) => {
+        const reader = new FileReader()
+        reader.onload = (ev) => resolve(ev.target?.result as string)
+        reader.readAsDataURL(file)
+      })
+      newUrls.push(url)
     }
-    
     setImages(prev => [...prev, ...newUrls])
-    setIsUploading(false)
     e.target.value = ''
   }
 
-  const handleDeleteImage = async (url: string, index: number) => {
-    // Attempt to delete it from storage first
-    await deletePropertyImage(url)
+  const handleDeleteImage = (_url: string, index: number) => {
     const newImages = [...images]
     newImages.splice(index, 1)
     setImages(newImages)
   }
 
-  const handleSubmit = async (e: React.FormEvent, isDraft: boolean = false) => {
+  const handleSubmit = async (e: React.FormEvent, _isDraft: boolean = false) => {
     e.preventDefault()
     if (!title || !price) {
       alert("Missing required fields")
       return
     }
-
     setIsSubmitting(true)
-
-    // DB Payload strictly based on Property interface
-    const payload = {
-      title,
-      price: Number(price),
-      price_label: priceLabel || null,
-      type: status,
-      category: category === 'commercial' ? null : category as PropertyCategory,
-      location,
-      latitude: latitude ? Number(latitude) : null,
-      longitude: longitude ? Number(longitude) : null,
-      beds,
-      baths,
-      area: Number(area || 0),
-      is_featured: isFeatured,
-      is_active: isActive,
-      tag: tag || null,
-      images,
-    }
-
-    try {
-      if (isEdit) {
-        const { error } = await supabase
-          .from('properties')
-          .update(payload)
-          .eq('id', initialData.id)
-        if (error) throw error
-        alert(t.successUpdate)
-      } else {
-        const { error } = await supabase
-          .from('properties')
-          .insert([payload])
-        if (error) throw error
-        alert(t.successCreate)
-      }
-      router.push(`/${lang}/admin/properties`)
-      router.refresh()
-    } catch (err: unknown) {
-      console.error(err)
-      const msg = err instanceof Error ? err.message : String(err)
-      alert(t.errorMsg + ": " + msg)
-    } finally {
-      setIsSubmitting(false)
-    }
+    await new Promise(r => setTimeout(r, 500))
+    setIsSubmitting(false)
+    alert(isEdit ? t.successUpdate : t.successCreate)
+    router.push(`/${lang}/admin/properties`)
+    router.refresh()
   }
 
   const toggleAmenity = (key: keyof typeof amenities) => {
@@ -147,7 +97,7 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
   return (
     <div className="bg-clear-day text-nordic min-h-screen selection:bg-hint-green selection:text-nordic pt-6 pb-16">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 pb-8">
           <div className="space-y-4">
             <nav aria-label="Breadcrumb" className="flex">
@@ -167,17 +117,17 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
             </div>
           </div>
           <div className="flex gap-3">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => router.push(`/${lang}/admin/properties`)}
               className="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-nordic hover:bg-gray-50 transition-colors font-medium font-sf-pro text-sm"
             >
               {t.cancel}
             </button>
-            <button 
+            <button
               type="button"
               onClick={(e) => handleSubmit(e, false)}
-              disabled={isSubmitting || isUploading}
+              disabled={isSubmitting}
               className="px-5 py-2.5 rounded-lg bg-mosque hover:bg-nordic text-white font-medium shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2 font-sf-pro text-sm disabled:opacity-50"
             >
               <span className="material-icons text-sm">{isSubmitting ? 'hourglass_empty' : 'save'}</span>
@@ -188,7 +138,7 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
 
         <form className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
           <div className="xl:col-span-8 space-y-8">
-            
+
             {/* Basic Info */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="px-8 py-6 border-b border-hint-green/30 flex items-center gap-3 bg-gradient-to-r from-hint-green/10 to-transparent">
@@ -202,56 +152,56 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                   <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="title">
                     {t.titleLabel} <span className="text-red-500">*</span>
                   </label>
-                  <input 
-                    className="w-full text-base px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro" 
-                    id="title" 
-                    placeholder={t.titlePlaceholder} 
+                  <input
+                    className="w-full text-base px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro"
+                    id="title"
+                    placeholder={t.titlePlaceholder}
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     required
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                   <div>
-                      <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="price">
-                        {t.priceLabel} <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-sf-pro text-sm">$</span>
-                        <input 
-                          className="w-full pl-7 pr-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-medium font-sf-pro" 
-                          id="price" 
-                          placeholder="0.00" 
-                          type="number"
-                          step="0.01"
-                          value={price}
-                          onChange={(e) => setPrice(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="priceLabel">
-                        {t.priceLabelInput}
-                      </label>
-                      <input 
-                        className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-medium font-sf-pro" 
-                        id="priceLabel" 
-                        placeholder={t.priceLabelPlaceholder} 
-                        type="text"
-                        value={priceLabel}
-                        onChange={(e) => setPriceLabel(e.target.value)}
+                  <div>
+                    <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="price">
+                      {t.priceLabel} <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-sf-pro text-sm">$</span>
+                      <input
+                        className="w-full pl-7 pr-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-medium font-sf-pro"
+                        id="price"
+                        placeholder="0.00"
+                        type="number"
+                        step="0.01"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        required
                       />
                     </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="priceLabel">
+                      {t.priceLabelInput}
+                    </label>
+                    <input
+                      className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-medium font-sf-pro"
+                      id="priceLabel"
+                      placeholder={t.priceLabelPlaceholder}
+                      type="text"
+                      value={priceLabel ?? ''}
+                      onChange={(e) => setPriceLabel(e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="status">{t.statusLabel}</label>
-                    <select 
-                      className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-sf-pro cursor-pointer" 
+                    <select
+                      className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-sf-pro cursor-pointer"
                       id="status"
                       value={status}
                       onChange={(e) => setStatus(e.target.value as PropertyType)}
@@ -262,8 +212,8 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="type">{t.typeLabel}</label>
-                    <select 
-                      className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-sf-pro cursor-pointer" 
+                    <select
+                      className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-sf-pro cursor-pointer"
                       id="type"
                       value={category}
                       onChange={(e) => setCategory(e.target.value as PropertyCategory)}
@@ -279,19 +229,17 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <label className="flex items-center gap-2.5 cursor-pointer group pt-8">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       className="w-5 h-5 border-gray-300 rounded focus:ring-mosque text-mosque"
                       checked={isActive}
                       onChange={(e) => setIsActive(e.target.checked)}
                     />
-                    <span className="text-sm font-bold sm:whitespace-nowrap text-nordic font-sf-pro">
-                      Active
-                    </span>
+                    <span className="text-sm font-bold sm:whitespace-nowrap text-nordic font-sf-pro">Active</span>
                   </label>
                   <label className="flex items-center gap-2.5 cursor-pointer group pt-8">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       className="w-5 h-5 text-mosque border-gray-300 rounded focus:ring-mosque"
                       checked={isFeatured}
                       onChange={(e) => setIsFeatured(e.target.checked)}
@@ -300,12 +248,12 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                   </label>
                   <div>
                     <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="tag">{t.tagLabel}</label>
-                    <input 
-                      className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro" 
-                      id="tag" 
-                      placeholder={t.tagPlaceholder} 
+                    <input
+                      className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro"
+                      id="tag"
+                      placeholder={t.tagPlaceholder}
                       type="text"
-                      value={tag}
+                      value={tag ?? ''}
                       onChange={(e) => setTag(e.target.value)}
                     />
                   </div>
@@ -322,21 +270,13 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                 <h2 className="text-xl font-bold text-nordic">{t.description}</h2>
               </div>
               <div className="p-8">
-                <div className="mb-3 flex gap-2 border-b border-gray-100 pb-2">
-                  <button type="button" className="p-1.5 text-gray-400 hover:text-nordic hover:bg-gray-50 rounded transition-colors"><span className="material-icons text-lg">format_bold</span></button>
-                  <button type="button" className="p-1.5 text-gray-400 hover:text-nordic hover:bg-gray-50 rounded transition-colors"><span className="material-icons text-lg">format_italic</span></button>
-                  <button type="button" className="p-1.5 text-gray-400 hover:text-nordic hover:bg-gray-50 rounded transition-colors"><span className="material-icons text-lg">format_list_bulleted</span></button>
-                </div>
-                <textarea 
-                  className="w-full px-4 py-3 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-sf-pro leading-relaxed resize-y min-h-[200px]" 
-                  id="description" 
+                <textarea
+                  className="w-full px-4 py-3 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-base font-sf-pro leading-relaxed resize-y min-h-[200px]"
+                  id="description"
                   placeholder={t.descriptionPlaceholder}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
-                <div className="mt-2 text-right text-xs text-gray-400 font-sf-pro">
-                  {description.length} / 2000 characters
-                </div>
               </div>
             </div>
 
@@ -353,68 +293,45 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
               </div>
               <div className="p-8">
                 <div className="relative border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50 p-10 text-center hover:bg-hint-green/10 hover:border-mosque/40 transition-colors cursor-pointer group">
-                  <input 
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                    multiple 
-                    type="file" 
+                  <input
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    multiple
+                    type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    disabled={isUploading}
                   />
                   <div className="flex flex-col items-center justify-center space-y-3">
                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-mosque group-hover:scale-110 transition-transform duration-300">
-                      <span className="material-icons text-2xl">{isUploading ? 'sync' : 'cloud_upload'}</span>
+                      <span className="material-icons text-2xl">cloud_upload</span>
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-base font-medium text-nordic font-sf-pro">{isUploading ? 'Uploading...' : t.galleryDrag}</p>
-                      <p className="text-xs text-gray-400 font-sf-pro">{t.gallerySize}</p>
-                    </div>
+                    <p className="text-base font-medium text-nordic font-sf-pro">{t.galleryDrag}</p>
+                    <p className="text-xs text-gray-400 font-sf-pro">{t.gallerySize}</p>
                   </div>
                 </div>
-                
+
                 {images.length > 0 && (
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                     {images.map((img, idx) => (
                       <div key={idx} className="aspect-square rounded-lg overflow-hidden relative group shadow-sm">
                         <img alt={`Property image ${idx}`} className="w-full h-full object-cover" src={img} />
                         <div className="absolute inset-0 bg-nordic/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[2px]">
-                          <button 
-                            type="button" 
+                          <button
+                            type="button"
                             onClick={() => handleDeleteImage(img, idx)}
                             className="w-8 h-8 rounded-full bg-white text-red-500 hover:bg-red-50 flex items-center justify-center transition-colors"
                           >
                             <span className="material-icons text-sm">delete</span>
                           </button>
-                          <button 
-                            type="button" 
-                            className="w-8 h-8 rounded-full bg-white text-nordic hover:bg-gray-50 flex items-center justify-center transition-colors"
-                          >
-                            <span className="material-icons text-sm">open_in_new</span>
-                          </button>
                         </div>
                         {idx === 0 && <span className="absolute top-2 left-2 bg-mosque text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm font-sf-pro uppercase tracking-wider">Main</span>}
                       </div>
                     ))}
-                    
-                    <div className="relative aspect-square rounded-lg border border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:text-mosque hover:border-mosque hover:bg-hint-green/20 transition-all group cursor-pointer overflow-hidden">
-                      <input 
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                        multiple 
-                        type="file" 
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        disabled={isUploading}
-                      />
-                      <span className="material-icons group-hover:scale-110 transition-transform">add</span>
-                      <span className="text-xs mt-1 font-medium font-sf-pro">Add More</span>
-                    </div>
                   </div>
                 )}
               </div>
             </div>
-
           </div>
-          
+
           <div className="xl:col-span-4 space-y-8">
             {/* Location */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -427,23 +344,22 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
               <div className="p-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="location">{t.locationLabel}</label>
-                  <input 
-                    className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro" 
-                    id="location" 
-                    placeholder={t.locationPlaceholder} 
+                  <input
+                    className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro"
+                    id="location"
+                    placeholder={t.locationPlaceholder}
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    required
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs text-gray-500 font-medium font-sf-pro mb-1 block" htmlFor="latitude">Latitude</label>
-                    <input 
-                      className="w-full px-3 py-2 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro" 
-                      id="latitude" 
-                      placeholder="e.g. 37.4419" 
+                    <input
+                      className="w-full px-3 py-2 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro"
+                      id="latitude"
+                      placeholder="e.g. 37.4419"
                       type="number"
                       step="any"
                       value={latitude}
@@ -452,10 +368,10 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                   </div>
                   <div>
                     <label className="text-xs text-gray-500 font-medium font-sf-pro mb-1 block" htmlFor="longitude">Longitude</label>
-                    <input 
-                      className="w-full px-3 py-2 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro" 
-                      id="longitude" 
-                      placeholder="e.g. -122.1430" 
+                    <input
+                      className="w-full px-3 py-2 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-mosque focus:border-mosque transition-all text-sm font-sf-pro"
+                      id="longitude"
+                      placeholder="e.g. -122.1430"
                       type="number"
                       step="any"
                       value={longitude}
@@ -468,7 +384,7 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                     <PropertyMap lat={Number(latitude)} lng={Number(longitude)} popupText={title || "Property Location"} />
                   </div>
                 ) : (
-                  <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200 group">
+                  <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
                     <div className="absolute inset-0 flex items-center justify-center bg-emerald-50 text-emerald-600">
                       <span className="bg-white/90 text-nordic px-3 py-1.5 rounded shadow-sm backdrop-blur-sm text-xs font-bold font-sf-pro flex items-center gap-1">
                         <span className="material-icons text-sm text-mosque">map</span> Enter coordinates to {t.previewMap.toLowerCase()}
@@ -489,32 +405,32 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
               </div>
               <div className="p-6 space-y-6">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="group">
+                  <div>
                     <label className="text-xs text-gray-500 font-medium font-sf-pro mb-1 block" htmlFor="area">{t.areaLabel}</label>
-                    <input 
-                      className="w-full text-left px-3 py-2 rounded border-gray-200 bg-gray-50 text-nordic focus:bg-white focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro text-sm" 
-                      id="area" 
-                      placeholder="0" 
+                    <input
+                      className="w-full text-left px-3 py-2 rounded border-gray-200 bg-gray-50 text-nordic focus:bg-white focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro text-sm"
+                      id="area"
+                      placeholder="0"
                       type="number"
                       value={area}
                       onChange={(e) => setArea(e.target.value)}
                     />
                   </div>
-                  <div className="group">
+                  <div>
                     <label className="text-xs text-gray-500 font-medium font-sf-pro mb-1 block" htmlFor="year">Year Built</label>
-                    <input 
-                      className="w-full text-left px-3 py-2 rounded border-gray-200 bg-gray-50 text-nordic focus:bg-white focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro text-sm" 
-                      id="year" 
-                      placeholder="YYYY" 
+                    <input
+                      className="w-full text-left px-3 py-2 rounded border-gray-200 bg-gray-50 text-nordic focus:bg-white focus:ring-1 focus:ring-mosque focus:border-mosque transition-all font-sf-pro text-sm"
+                      id="year"
+                      placeholder="YYYY"
                       type="number"
                       value={yearBuilt}
                       onChange={(e) => setYearBuilt(e.target.value)}
                     />
                   </div>
                 </div>
-                
+
                 <hr className="border-gray-100" />
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium text-nordic font-sf-pro flex items-center gap-2">
@@ -526,7 +442,7 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                       <button type="button" onClick={() => adjustCount(setBeds, 1)} className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 text-gray-600 transition-colors border-l border-gray-100">+</button>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium text-nordic font-sf-pro flex items-center gap-2">
                       <span className="material-icons text-gray-400 text-sm">shower</span> {t.bathroomsLabel}
@@ -551,46 +467,23 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
                 </div>
 
                 <hr className="border-gray-100" />
-                
+
                 <div>
                   <h3 className="text-sm font-bold text-nordic mb-3 font-sf-pro uppercase tracking-wider text-xs text-gray-500">Amenities</h3>
                   <div className="space-y-2">
-                    <label className="flex items-center gap-2.5 cursor-pointer group">
-                      <input 
-                        type="checkbox" 
-                        className="w-4 h-4 text-mosque border-gray-300 rounded focus:ring-mosque"
-                        checked={amenities.swimmingPool}
-                        onChange={() => toggleAmenity('swimmingPool')}
-                      />
-                      <span className="text-sm text-gray-700 font-sf-pro group-hover:text-nordic transition-colors">Swimming Pool</span>
-                    </label>
-                    <label className="flex items-center gap-2.5 cursor-pointer group">
-                      <input 
-                        type="checkbox" 
-                        className="w-4 h-4 text-mosque border-gray-300 rounded focus:ring-mosque"
-                        checked={amenities.garden}
-                        onChange={() => toggleAmenity('garden')}
-                      />
-                      <span className="text-sm text-gray-700 font-sf-pro group-hover:text-nordic transition-colors">Garden</span>
-                    </label>
-                    <label className="flex items-center gap-2.5 cursor-pointer group">
-                      <input 
-                        type="checkbox" 
-                        className="w-4 h-4 text-mosque border-gray-300 rounded focus:ring-mosque"
-                        checked={amenities.airConditioning}
-                        onChange={() => toggleAmenity('airConditioning')}
-                      />
-                      <span className="text-sm text-gray-700 font-sf-pro group-hover:text-nordic transition-colors">Air Conditioning</span>
-                    </label>
-                    <label className="flex items-center gap-2.5 cursor-pointer group">
-                      <input 
-                        type="checkbox" 
-                        className="w-4 h-4 text-mosque border-gray-300 rounded focus:ring-mosque"
-                        checked={amenities.smartHome}
-                        onChange={() => toggleAmenity('smartHome')}
-                      />
-                      <span className="text-sm text-gray-700 font-sf-pro group-hover:text-nordic transition-colors">Smart Home</span>
-                    </label>
+                    {(['swimmingPool', 'garden', 'airConditioning', 'smartHome'] as const).map((key) => (
+                      <label key={key} className="flex items-center gap-2.5 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-mosque border-gray-300 rounded focus:ring-mosque"
+                          checked={amenities[key]}
+                          onChange={() => toggleAmenity(key)}
+                        />
+                        <span className="text-sm text-gray-700 font-sf-pro group-hover:text-nordic transition-colors capitalize">
+                          {key.replace(/([A-Z])/g, ' $1')}
+                        </span>
+                      </label>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -598,17 +491,17 @@ export default function PropertyForm({ lang, initialData, dict }: PropertyFormPr
           </div>
 
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 shadow-xl md:hidden z-40 flex gap-3">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => router.push(`/${lang}/admin/properties`)}
               className="flex-1 py-3 rounded-lg border border-gray-300 bg-white text-nordic font-medium font-sf-pro"
             >
               {t.cancel}
             </button>
-            <button 
+            <button
               type="button"
               onClick={(e) => handleSubmit(e, false)}
-              disabled={isSubmitting || isUploading}
+              disabled={isSubmitting}
               className="flex-1 py-3 rounded-lg bg-mosque text-white font-medium font-sf-pro flex justify-center items-center gap-2 disabled:opacity-50"
             >
               {isSubmitting ? t.saving : t.saveProperty}
