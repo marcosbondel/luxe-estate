@@ -1,6 +1,8 @@
 # Luxe Estate
 
-Welcome to **Luxe Estate**, a premium real estate application designed for showcasing and selling luxury properties.
+> Built with vibecoding — the practice of shipping production-ready software through natural-language collaboration with an AI coding assistant.
+
+Welcome to **Luxe Estate**, a premium real estate application designed for showcasing and selling luxury properties. This project was developed entirely via vibecoding using [Antigravity](https://antigravity.dev) as the AI coding assistant, with Next.js, Tailwind CSS, Supabase, and Vercel as the core stack — from initial scaffold to deployment, without writing a single line of code by hand.
 
 ## Business Overview
 Luxe Estate is a modern web platform for high-end real estate listings. Our application provides an intuitive and luxurious experience for prospective buyers to:
@@ -74,4 +76,4 @@ Make sure you have Node.js (v18 or higher) and a package manager installed (npm,
 Contributions, issues, and feature requests are welcome!
 
 ---
-*Powered by Next.js and Supabase*
+*Built via vibecoding · Next.js · Tailwind CSS · Supabase · Vercel · [Antigravity](https://antigravity.dev)*
