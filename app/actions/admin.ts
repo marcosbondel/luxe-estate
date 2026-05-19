@@ -5,7 +5,7 @@ import { mockUsers } from '@/src/data/mockProperties'
 
 export type UserRole = 'admin' | 'agent' | 'user'
 
-export async function updateUserRole(_userId: string, _role: UserRole) {
+export async function updateUserRole(_userId: string, _role: UserRole): Promise<{ success?: boolean; error?: string }> {
   revalidatePath('/[lang]/admin/users', 'page')
   return { success: true }
 }
